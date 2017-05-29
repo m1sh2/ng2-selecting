@@ -1,0 +1,28 @@
+{
+  "name": "ng2-selecting",
+  "version": "0.0.2",
+  "description": "Selecting module + component for Angular 2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m1sh2/ng2-selecting.git"
+  },
+  "keywords": [
+    "selecting",
+    "angular2",
+    "select",
+    "ng2"
+  ],
+  "author": "Mike Datsko <mike@datsko.it> (http://datsko.it)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/m1sh2/ng2-selecting/issues"
+  },
+  "homepage": "https://github.com/m1sh2/ng2-selecting#readme",
+  "dependencies": {
+    "ng2-uuid": "file:///Users/mike/Documents/so/testing/ng2-uuid"
+  }
+}

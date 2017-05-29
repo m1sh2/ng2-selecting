@@ -1,0 +1,41 @@
+
+<div (blur)="isShowOptions = false" (keydown.enter)="filterInput.focus()">
+  <input type="hidden" [name]="name" [value]="getSelectedValue()">
+  <div class="selected-block" (click)="filterInput.focus()">
+    <div
+      class="option-block-selected"
+      *ngFor="let option of selectedData"
+      [innerText]="option.value"
+      (click)="unselect(option)"
+      >
+      
+    </div>
+
+    <div class="input-block">
+      <input
+        type="text"
+        #filterInput
+        placeholder="Search term"
+        (keydown)="keyDown($event)"
+        (keyup)="filterSelectData($event)"
+        (focus)="focus()"
+        (blur)="blur()"
+      >
+    </div>
+  </div>
+
+  <div #selectBlockEl class="select-block" [hidden]="!isShowOptions">
+    <div
+      class="option-block"
+      *ngFor="let option of selectData"
+      [class.selected-option]="option.selected"
+      [class.hover-option]="option.hovered"
+      [innerText]="option.value"
+      [hidden]="option.selected"
+      (click)="select(option)"
+      (mousedown)="beforeSelect()"
+      (mouseenter)="over(option)"
+      >
+    </div>
+  </div>
+</div>
