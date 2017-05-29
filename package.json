@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/m1sh2/ng2-selecting#readme",
   "dependencies": {
-    "ng2-uuid": "file:///Users/mike/Documents/so/testing/ng2-uuid"
+    "ng2-uuid": "git+https://github.com/m1sh2/ng2-uuid.git"
   }
 }
