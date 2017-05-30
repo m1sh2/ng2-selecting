@@ -18,7 +18,8 @@ export class SelectComponent implements OnInit {
   @ViewChild('selectBlockEl') private selectBlockEl: ElementRef;
   @ViewChild('filterInput') private filterInputEl: ElementRef;
 
-  @Input() items: Array<any> = [];
+  @Input() itemsSource: Array<any> = [];
+  @Input() itemsSelectedSource: Array<any> = [];
   @Input() name: string = 'selecting';
   @Output() itemsSelected = new EventEmitter();
 
@@ -27,6 +28,7 @@ export class SelectComponent implements OnInit {
   private selectedData: Array<any> = [];
   private isShowOptions: boolean = false;
   private isSelectInProgress: boolean = false;
+  private isKeyDown: boolean = false;
 
   constructor(
     private uuid: Uuid
@@ -41,10 +43,21 @@ export class SelectComponent implements OnInit {
 
   ngOnChanges(changes) {
     this.setSelectData();
+
+    if (changes.itemsSelectedSource) {
+      this.selectedData = [];
+      this.selectData.forEach(option_ => {
+        if (this.itemsSelectedSource.indexOf(option_.value) > -1) {
+          this.select(option_);
+        } else {
+          this.unselect(option_);
+        }
+      });
+    }
   }
 
   setSelectData() {
-    this.items.forEach(item => {
+    this.itemsSource.forEach(item => {
 
       if (this.selectData.filter(option_ => option_.value === item).length) {
         return;
@@ -130,15 +143,20 @@ export class SelectComponent implements OnInit {
 
     if (!!this['key' + event.keyCode]) {
       this['key' + event.keyCode](event);
-      return;
+
+      if (event.keyCode !== 8) {
+        return false;
+      }
     }
 
-    this.selectData = this.selectDataOrigin.filter(option_ => {
-      const condition = value
-        && option_.value.toLowerCase().search(value.toLowerCase()) > -1;
-
-      return condition;
-    });
+    if (value) {
+      this.selectData = this.selectDataOrigin.filter(option_ => {
+        const condition = option_.value.toLowerCase().search(value.toLowerCase()) > -1;
+        return condition;
+      });
+    } else {
+      this.selectData = this.selectDataOrigin;
+    }
   }
 
   focus() {
@@ -180,17 +198,26 @@ export class SelectComponent implements OnInit {
   }
 
   keyDown(event) {
-    if (!!this['key' + event.keyCode]) {
+    if (event.keyCode !== 8 && !!this['key' + event.keyCode]) {
       event.preventDefault();
+    }
+
+    if (event.keyCode === 8 && this.filterInputEl.nativeElement.value.length === 1) {
+      this.isKeyDown = true;
     }
   }
 
   key8() {
-    let optionToUnSelect = this.selectedData.splice(this.selectedData.length - 1, 1)[0];
+    if (this.filterInputEl.nativeElement.value || !this.selectedData.length || this.isKeyDown) {
 
-    if (optionToUnSelect) {
-      this.unselect(optionToUnSelect);
+    } else {
+      let optionToUnSelect = this.selectedData.splice(this.selectedData.length - 1, 1)[0];
+
+      if (optionToUnSelect) {
+        this.unselect(optionToUnSelect);
+      }
     }
+    this.isKeyDown = false;
   }
 
   key13() {
